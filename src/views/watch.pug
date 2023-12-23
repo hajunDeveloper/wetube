@@ -20,15 +20,22 @@ block content
                 span#fullScreen
                     i.fas.fa-expand
     div.video__data
-        p.video_title=video.title
+        p.video__title=video.title
         small.video__owner Uploaded by 
             a(href=`/users/${video.owner._id}`)=video.owner.name
-        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr",{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})
+        small.video__createdAt=new Date(video.createdAt).toLocaleDateString("ko-kr",{weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})        
     if loggedIn 
-        div.video__comments
+        div.video__add-comments
             form.video__comment-form#commentForm
                 textarea(cols="30", rows="10", placeholder="Write a nice comments...")
                 button Add Comment
+    div.video__comments
+        uL 
+            each comment in video.comments.reverse()
+                li.video__comment(data-id=comment.id)
+                    i.fas.fa-comment
+                    span  #{comment.text}
+                    span ❌
 block scripts 
     script(src="/static/js/videoPlayer.js")
     if loggedIn
