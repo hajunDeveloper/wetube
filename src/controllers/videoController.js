@@ -142,3 +142,8 @@ export const createComment = async (req, res) => {
     video.save();
     return res.status(201).json({newCommentId: comment._id});
 };
+
+export const deleteComment = async (req, res) => {
+    console.log('In VideoController delete method');
+    return res.status(200);
+};
