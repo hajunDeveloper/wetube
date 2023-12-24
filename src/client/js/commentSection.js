@@ -3,11 +3,14 @@ const form = document.getElementById("commentForm");
 const deleteBtn = document.querySelectorAll(".video__comment-delete");
 
 const deleteComment = async (event) => {
-  console.log(event);
+  const li = event.target.parentElement;
   const commentId = event.target.parentElement.dataset.id;
   const response = await fetch(`/api/comment/${commentId}/deletecomment`,{
     method: "DELETE",
   });
+  if(response.status === 201){
+    li.remove();
+  };
 };
 
 const addComment = (text, id) => {

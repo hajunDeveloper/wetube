@@ -90,7 +90,7 @@ export const deleteVideo = async (req, res) =>{
     } = req.session;
     const video = await Video.findById(id);
     if(!video){
-        return res.status(404).render("404", { pageTitle: "Video not fount"});
+        return res.status(404).render("404", { pageTitle: "Video not found"});
     }
     if(String(video.owner) !== String(_id)){
         return res.status(403).redirect("/");
@@ -144,6 +144,18 @@ export const createComment = async (req, res) => {
 };
 
 export const deleteComment = async (req, res) => {
-    console.log('In VideoController delete method');
-    return res.status(200);
+    const { id } = req.params;
+    const { 
+        user: {_id},
+    } = req.session;
+    const comment = await Comment.findById(id).populate("video");
+    if(!comment){
+        return res.status(404).render("404", { pageTitle: "Comment not found"});
+    }
+    if(String(comment.owner) == String(_id)){
+        await Comment.findByIdAndDelete(id);
+        comment.video.comments.splice(comment.video.comments.indexOf(id),1);
+        comment.video.save();
+    };
+    return res.sendStatus(201);
 };
